@@ -17,6 +17,10 @@
 */
 import React from "react";
 import ReactDOM from "react-dom/client";
+// import { ConnectedRouter } from "react-router-redux";
+import { Provider } from "react-redux";
+// import { Route, Switch } from "react-router-dom";
+import configureStore, { history } from "store";
 
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
@@ -29,12 +33,30 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import AdminLayout from "layouts/Admin.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+export const store = configureStore();
 
-root.render(
-  <BrowserRouter>
-    <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Redirect from="/" to="/admin/dashboard" />
-    </Switch>
-  </BrowserRouter>
-);
+// Create a reusable render method that we can call more than once
+let render = () => {
+  // Dynamically import our main App component, and render it
+  root.render(
+    <Provider store={store}>
+      <BrowserRouter history={history}>
+        <Switch>
+          <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+          <Redirect from="/" to="/admin/dashboard" />
+        </Switch>
+      </BrowserRouter>
+    </Provider>
+  );
+};
+
+// root.render(
+//   <BrowserRouter>
+//     <Switch>
+//       <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+//       <Redirect from="/" to="/admin/dashboard" />
+//     </Switch>
+//   </BrowserRouter>
+// );
+
+render();

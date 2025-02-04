@@ -1,5 +1,6 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
+import Feedbacks from "components/Feedbacks/Feedbacks";
 // react-bootstrap components
 import {
   Badge,
@@ -20,8 +21,9 @@ function Dashboard() {
   return (
     <>
       <Container fluid>
-        <Row>
-          <Col lg="3" sm="6">
+        <Feedbacks />
+        {/* <Row> */}
+        {/* <Col lg="3" sm="6">
             <Card className="card-stats">
               <Card.Body>
                 <Row>
@@ -124,9 +126,9 @@ function Dashboard() {
                 </div>
               </Card.Footer>
             </Card>
-          </Col>
-        </Row>
-        <Row>
+          </Col> */}
+        {/* </Row> */}
+        {/* <Row>
           <Col md="8">
             <Card>
               <Card.Header>
@@ -631,7 +633,7 @@ function Dashboard() {
               </Card.Footer>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </Container>
     </>
   );
