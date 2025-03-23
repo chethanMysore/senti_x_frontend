@@ -1,4 +1,4 @@
-import { FETCH_ALL_FEEDBACKS, FEEDBACKS_DATA } from "constants/ActionTypes";
+import { FEEDBACKS_DATA } from "constants/ActionTypes";
 
 const INIT_STATE = {
   feedbacksData: [12, 13, 14],

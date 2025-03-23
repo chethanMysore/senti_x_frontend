@@ -1,4 +1,4 @@
-import { call, put, takeLatest, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 
 import {
   FETCH_ALL_FEEDBACKS,
@@ -6,15 +6,15 @@ import {
   WRITE_ERROR_MESSAGE,
 } from "constants/ActionTypes";
 
-import { fetchFeedbacksData } from "util/apiCalls";
+import { fetchAllFeedbacksData } from "api/Feedbacks";
 
 const getEntityData = function* (entityName, queryParams = []) {
   try {
-    const data = yield call(fetchFeedbacksData, entityName, queryParams);
+    const data = yield call(fetchAllFeedbacksData, entityName, queryParams);
     if (data.isError) {
       yield put({
         type: WRITE_ERROR_MESSAGE,
-        payload: { message: error.message, source: "getEntityData" },
+        payload: { message: data.message, source: "fetchAllFeedbacksData" },
       });
     } else {
       yield put({ type: entityName, data });
@@ -22,11 +22,11 @@ const getEntityData = function* (entityName, queryParams = []) {
   } catch (error) {
     yield put({
       type: WRITE_ERROR_MESSAGE,
-      payload: { message: error.message, source: "getTableData" },
+      payload: { message: error.message, source: "getEntityData" },
     });
   }
 };
 
-export const apiSagas = function* (action) {
+export const apiSagas = function* () {
   yield takeLatest(FETCH_ALL_FEEDBACKS, () => getEntityData(FEEDBACKS_DATA));
 };
