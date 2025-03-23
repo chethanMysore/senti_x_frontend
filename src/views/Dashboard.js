@@ -1,6 +1,7 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
 import Feedbacks from "components/Feedbacks/Feedbacks";
+import TableList from "./TableList";
 // react-bootstrap components
 import {
   Badge,
@@ -22,6 +23,7 @@ function Dashboard() {
     <>
       <Container fluid>
         <Feedbacks />
+        <TableList />
         {/* <Row> */}
         {/* <Col lg="3" sm="6">
             <Card className="card-stats">

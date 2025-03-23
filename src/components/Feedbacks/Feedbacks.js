@@ -36,7 +36,38 @@ class Feedbacks extends Component {
     const feedbacksData = this.props.feedbacksData;
     return (
       <Row>
-        <Col lg="3" sm="6">
+        <Col md="12">
+          <Card className="strpied-tabled-with-hover">
+            <Card.Header>
+              <Card.Title as="h4">Feedbacks</Card.Title>
+              <p className="card-category">Feedbacks from kafka cluster</p>
+            </Card.Header>
+            <Card.Body className="table-full-width table-responsive px-0">
+              <Table className="table-hover table-striped">
+                <thead>
+                  <tr>
+                    <th className="border-0">Type</th>
+                    <th className="border-0">Message</th>
+                    <th className="border-0">Created On</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {!!feedbacksData &&
+                    !!feedbacksData.feedbacks &&
+                    feedbacksData.feedbacks.length > 0 &&
+                    feedbacksData.feedbacks.map((data, index) => (
+                      <tr>
+                        <td>{data.typ}</td>
+                        <td>{data.msg}</td>
+                        <td>{data.created_on}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+            </Card.Body>
+          </Card>
+        </Col>
+        {/* <Col lg="3" sm="6">
           <Card>
             <p>Feedbacks Page</p>
             <Card.Body>
@@ -46,14 +77,14 @@ class Feedbacks extends Component {
                   feedbacksData.feedbacks.length > 0 &&
                   feedbacksData.feedbacks.map((data, index) => (
                     <div>
-                      <p className="card-category">{data}</p>
                       <p className="card-category">{index}</p>
+                      <p className="card-category">{data}</p>
                     </div>
                   ))}
               </Row>
             </Card.Body>
           </Card>
-        </Col>
+        </Col> */}
       </Row>
       //   <div className="app-wrapper">
       //     <ContainerHeader match={this.props.match} title={"Event List"} />
