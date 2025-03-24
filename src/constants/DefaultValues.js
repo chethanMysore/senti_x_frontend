@@ -26,3 +26,20 @@ export const modelsByUsernamePath = "/models/username";
 export const userEditByIDPath = "/users/edit";
 export const modelCreatePath = "/models/create";
 export const modelEditPath = "/models/edit";
+
+// User Filter Params
+export const UserFilterParams = {
+  USERID: "id",
+  USERNAME: "username",
+  NAME: "name",
+};
+
+// Model Filter Params
+export const ModelFilterParams = {
+  MODELID: "id",
+  MODELNAME: "name",
+  USERNAME: "username",
+};
+
+export const INVALID_CREDENTIALS = "INVALID_CREDENTIALS";
+export const ERROR_400 = "Request failed with error 400";

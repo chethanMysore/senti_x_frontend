@@ -1,3 +1,4 @@
+/*eslint no-unused-vars: ["error", {"argsIgnorePattern": "params"}]*/
 import {
   apiInferenceBasePath,
   usersListPath,
@@ -9,7 +10,7 @@ import {
 
 import { FetchData, UpdateData } from "util/apiCalls";
 
-export const fetchAllUsers = async () => {
+export const fetchAllUsers = async (params) => {
   return new Promise((resolve, reject) => {
     FetchData(apiInferenceBasePath, usersListPath)
       .then((data) => resolve(data))
@@ -20,9 +21,9 @@ export const fetchAllUsers = async () => {
   });
 };
 
-export const fetchUserByID = async (userID) => {
+export const fetchUserByID = async (params) => {
   return new Promise((resolve, reject) => {
-    FetchData(apiInferenceBasePath, userByIDPath, true, userID)
+    FetchData(apiInferenceBasePath, userByIDPath, true, params.userID)
       .then((data) => resolve(data))
       .catch((err) => {
         err.isError = true;
@@ -31,9 +32,9 @@ export const fetchUserByID = async (userID) => {
   });
 };
 
-export const fetchUserByUsername = async (username) => {
+export const fetchUserByUsername = async (params) => {
   return new Promise((resolve, reject) => {
-    FetchData(apiInferenceBasePath, userByUsernamePath, true, username)
+    FetchData(apiInferenceBasePath, userByUsernamePath, true, params.username)
       .then((data) => resolve(data))
       .catch((err) => {
         err.isError = true;
@@ -42,9 +43,9 @@ export const fetchUserByUsername = async (username) => {
   });
 };
 
-export const fetchUsersByName = async (name) => {
+export const fetchUsersByName = async (params) => {
   return new Promise((resolve, reject) => {
-    FetchData(apiInferenceBasePath, usersByNamePath, true, name)
+    FetchData(apiInferenceBasePath, usersByNamePath, true, params.name)
       .then((data) => resolve(data))
       .catch((err) => {
         err.isError = true;
@@ -53,9 +54,14 @@ export const fetchUsersByName = async (name) => {
   });
 };
 
-export const updateUserByID = async (userID, updatedUser) => {
+export const updateUserByID = async (params) => {
   return new Promise((resolve, reject) => {
-    UpdateData(apiInferenceBasePath, userEditByIDPath, userID, updatedUser)
+    UpdateData(
+      apiInferenceBasePath,
+      userEditByIDPath,
+      params.userID,
+      params.updatedUser
+    )
       .then((data) => resolve(data))
       .catch((err) => {
         err.isError = true;

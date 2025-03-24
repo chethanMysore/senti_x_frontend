@@ -1,7 +1,8 @@
+/*eslint no-unused-vars: ["error", {"argsIgnorePattern": "params"}]*/
 import { apiTrainBasePath, feedbacksDataPath } from "constants/DefaultValues";
 import { FetchData } from "util/apiCalls";
 
-export const fetchAllFeedbacksData = async () => {
+export const fetchAllFeedbacksData = async (params) => {
   return new Promise((resolve, reject) => {
     FetchData(apiTrainBasePath, feedbacksDataPath)
       .then((data) => resolve(data))

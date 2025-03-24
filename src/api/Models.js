@@ -1,3 +1,4 @@
+/*eslint no-unused-vars: ["error", {"argsIgnorePattern": "params"}]*/
 import {
   apiInferenceBasePath,
   modelsListPath,
@@ -10,7 +11,7 @@ import {
 
 import { FetchData, UpdateData, CreateDataInstance } from "util/apiCalls";
 
-export const fetchAllModels = async () => {
+export const fetchAllModels = async (params) => {
   return new Promise((resolve, reject) => {
     FetchData(apiInferenceBasePath, modelsListPath)
       .then((data) => resolve(data))
@@ -21,9 +22,9 @@ export const fetchAllModels = async () => {
   });
 };
 
-export const fetchModelByID = async (modelID) => {
+export const fetchModelByID = async (params) => {
   return new Promise((resolve, reject) => {
-    FetchData(apiInferenceBasePath, modelByIDPath, true, modelID)
+    FetchData(apiInferenceBasePath, modelByIDPath, true, params.modelID)
       .then((data) => resolve(data))
       .catch((err) => {
         err.isError = true;
@@ -32,9 +33,9 @@ export const fetchModelByID = async (modelID) => {
   });
 };
 
-export const fetchModelsByUsername = async (username) => {
+export const fetchModelsByUsername = async (params) => {
   return new Promise((resolve, reject) => {
-    FetchData(apiInferenceBasePath, modelsByUsernamePath, true, username)
+    FetchData(apiInferenceBasePath, modelsByUsernamePath, true, params.username)
       .then((data) => resolve(data))
       .catch((err) => {
         err.isError = true;
@@ -43,9 +44,9 @@ export const fetchModelsByUsername = async (username) => {
   });
 };
 
-export const fetchModelsByName = async (name) => {
+export const fetchModelsByName = async (params) => {
   return new Promise((resolve, reject) => {
-    FetchData(apiInferenceBasePath, modelsByNamePath, true, name)
+    FetchData(apiInferenceBasePath, modelsByNamePath, true, params.name)
       .then((data) => resolve(data))
       .catch((err) => {
         err.isError = true;
@@ -54,9 +55,9 @@ export const fetchModelsByName = async (name) => {
   });
 };
 
-export const createNewModel = async (modelData) => {
+export const createNewModel = async (params) => {
   return new Promise((resolve, reject) => {
-    CreateDataInstance(apiInferenceBasePath, modelCreatePath, modelData)
+    CreateDataInstance(apiInferenceBasePath, modelCreatePath, params.modelData)
       .then((data) => resolve(data))
       .catch((err) => {
         err.isError = true;
@@ -65,9 +66,14 @@ export const createNewModel = async (modelData) => {
   });
 };
 
-export const updateModelByID = async (modelID, updatedModel) => {
+export const updateModelByID = async (params) => {
   return new Promise((resolve, reject) => {
-    UpdateData(apiInferenceBasePath, modelEditPath, modelID, updatedModel)
+    UpdateData(
+      apiInferenceBasePath,
+      modelEditPath,
+      params.modelID,
+      params.updatedModel
+    )
       .then((data) => resolve(data))
       .catch((err) => {
         err.isError = true;

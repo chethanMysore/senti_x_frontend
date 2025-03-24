@@ -8,9 +8,9 @@ import {
 
 import { Register, GetAccessToken, FetchData } from "util/apiCalls";
 
-export const registerNewUser = async (newUserData) => {
+export const registerNewUser = async (params) => {
   return new Promise((resolve, reject) => {
-    Register(apiInferenceBasePath, authRegisterPath, newUserData)
+    Register(apiInferenceBasePath, authRegisterPath, params.newUserData)
       .then((data) => resolve(data))
       .catch((err) => {
         err.isError = true;
@@ -19,11 +19,21 @@ export const registerNewUser = async (newUserData) => {
   });
 };
 
-export const loginUser = async (username, password) => {
+export const loginUser = async (params) => {
   return new Promise((resolve, reject) => {
-    GetAccessToken(apiInferenceBasePath, authLoginPath, username, password)
+    GetAccessToken(
+      apiInferenceBasePath,
+      authLoginPath,
+      params.username,
+      params.password
+    )
       .then((_data) => {
-        FetchData(apiInferenceBasePath, userByUsernamePath, true, username)
+        FetchData(
+          apiInferenceBasePath,
+          userByUsernamePath,
+          true,
+          params.username
+        )
           .then((user) => resolve(user))
           .catch((err) => {
             err.isError = true;

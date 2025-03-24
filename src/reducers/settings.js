@@ -32,7 +32,7 @@ const initialSettings = {
   },
 };
 
-const settings = (state = initialSettings, action) => {
+export default (state = initialSettings, action) => {
   switch (action.type) {
     case "@@router/LOCATION_CHANGE":
       return {
@@ -93,5 +93,3 @@ const settings = (state = initialSettings, action) => {
       return state;
   }
 };
-
-export default settings;

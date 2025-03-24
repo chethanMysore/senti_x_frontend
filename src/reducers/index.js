@@ -1,12 +1,18 @@
 import { combineReducers } from "redux";
 import { routerReducer } from "react-router-redux";
 import settings from "./settings";
-import Api from "./Api";
+import feedback from "./Feedback";
+import user from "./User";
+import model from "./Model";
+import auth from "./Auth";
 
 const reducers = combineReducers({
   routing: routerReducer,
   settings: settings,
-  api: Api,
+  feedback: feedback,
+  user: user,
+  model: model,
+  auth: auth,
 });
 
 export default reducers;
