@@ -5,10 +5,12 @@ import feedback from "./Feedback";
 import user from "./User";
 import model from "./Model";
 import auth from "./Auth";
+import notification from "./Notification";
 
 const reducers = combineReducers({
   routing: routerReducer,
   settings: settings,
+  notification: notification,
   feedback: feedback,
   user: user,
   model: model,

@@ -15,19 +15,19 @@ const INIT_STATE = {
   initURL: "",
   alertMessage: "",
   showMessage: false,
-  authUser: {},
+  authUser: null,
 };
 
-export default (state = INIT_STATE, { type, data }) => {
+export default (state = INIT_STATE, { type, payload }) => {
   switch (type) {
     case ON_REGISTER_USER_SUCCESS: {
-      return { ...state, loader: false, authUser: data.user };
+      return { ...state, loader: false, authUser: payload.user };
     }
     case ON_LOGIN_USER_SUCCESS: {
-      return { ...state, loader: false, authUser: data.user };
+      return { ...state, loader: false, authUser: payload.user };
     }
     case INIT_URL: {
-      return { ...state, initURL: data };
+      return { ...state, initURL: payload };
     }
     case ON_LOGOUT_USER_SUCCESS: {
       return { ...state, authUser: null, loader: false, initURL: "/" };
@@ -39,13 +39,18 @@ export default (state = INIT_STATE, { type, data }) => {
       return { ...state, loader: false };
     }
     case SHOW_MESSAGE: {
-      return { ...state, alertMessage: data, showMessage: true, loader: false };
+      return {
+        ...state,
+        alertMessage: payload,
+        showMessage: true,
+        loader: false,
+      };
     }
     case HIDE_MESSAGE: {
       return { ...state, alertMessage: "", showMessage: false, loader: false };
     }
     case ON_RELOAD_USER_DATA_SUCCESS: {
-      return { ...state, loader: false, authUser: data.user };
+      return { ...state, loader: false, authUser: payload.user };
     }
     default:
       return state;

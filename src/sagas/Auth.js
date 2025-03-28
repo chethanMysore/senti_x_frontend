@@ -14,15 +14,21 @@ import {
 } from "constants/ActionTypes";
 
 import { registerNewUser, loginUser } from "api";
-import { showAuthMessage } from "actions";
-import { INVALID_CREDENTIALS, ERROR_400 } from "constants/DefaultValues";
+import { showAuthMessage, showErrorNotification } from "actions";
+import { INVALID_CREDENTIALS } from "constants/DefaultValues";
+import { ERROR_401 } from "constants/DefaultValues";
+import { NotificationPlacement } from "constants/DefaultValues";
 
 const execLoginAndLinkSideEffects = function* (username, password) {
   try {
     const user = yield call(loginUser, { username, password });
     if (user.isError) {
-      if (user.message === ERROR_400) {
-        yield put(showAuthMessage(INVALID_CREDENTIALS));
+      if (user.status == ERROR_401) {
+        yield put(
+          showErrorNotification(INVALID_CREDENTIALS, {
+            position: NotificationPlacement.TOP_CENTER,
+          })
+        );
       } else {
         yield put({
           type: WRITE_ERROR_MESSAGE,
@@ -40,8 +46,12 @@ const execLoginAndLinkSideEffects = function* (username, password) {
       });
     }
   } catch (error) {
-    if (error.message === ERROR_400) {
-      yield put(showAuthMessage(INVALID_CREDENTIALS));
+    if (error.status == ERROR_401) {
+      yield put(
+        showErrorNotification(INVALID_CREDENTIALS, {
+          position: NotificationPlacement.TOP_CENTER,
+        })
+      );
     } else {
       yield put({
         type: WRITE_ERROR_MESSAGE,

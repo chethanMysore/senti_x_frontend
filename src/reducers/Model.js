@@ -12,33 +12,33 @@ const INIT_STATE = {
   modelDetails: {},
 };
 
-export default (state = INIT_STATE, { type, data }) => {
+export default (state = INIT_STATE, { type, payload }) => {
   switch (type) {
     case ON_FETCH_ALL_MODELS_SUCCESS: {
-      return Object.assign({}, state.modelsList, data);
+      return Object.assign({}, state.modelsList, payload);
     }
     case ON_FETCH_MODEL_DETAILS_SUCCESS: {
-      return Object.assign({}, state.modelDetails, data);
+      return Object.assign({}, state.modelDetails, payload);
     }
     case ON_UPDATE_MODELS_DATA_SUCCESS: {
       let newState = { ...state };
       newState.modelsList = UpdateItemInList(
         state.modelsList,
-        data.model,
+        payload.model,
         "modelID"
       );
       return { ...newState };
     }
     case ON_CREATE_MODEL_SUCCESS: {
       let newState = { ...state };
-      newState.modelsList = [...state.modelsList, data.model];
-      newState.modelDetails = data.model;
+      newState.modelsList = [...state.modelsList, payload.model];
+      newState.modelDetails = payload.model;
       return { ...newState };
     }
     case ON_UPDATE_MODEL_DETAILS_SUCCESS: {
       let newState = { ...state };
-      if (state.modelDetails.modelID === data.model.modelID) {
-        newState.modelDetails = { ...state.modelDetails, ...data.model };
+      if (state.modelDetails.modelID === payload.model.modelID) {
+        newState.modelDetails = { ...state.modelDetails, ...payload.model };
       }
       return { ...newState };
     }

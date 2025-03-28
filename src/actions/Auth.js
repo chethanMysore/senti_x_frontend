@@ -15,7 +15,7 @@ export const registerUser = (user) => {
 };
 
 export const loginUser = (authUser) => {
-  return { type: LOGIN_USER, payload: authUser };
+  return { type: LOGIN_USER, payload: { ...authUser } };
 };
 
 export const logoutUser = () => {

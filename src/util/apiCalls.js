@@ -1,5 +1,5 @@
 import axios from "axios";
-import cookie from "react-cookie";
+import cookie from "react-cookies";
 
 const buildUrlQuery = (url, params) => {
   let query = "";
@@ -14,21 +14,30 @@ const buildUrlQuery = (url, params) => {
 const getTokenFromApi = (apiBasePath, tokenPath, username, password) => {
   return new Promise((resolve, reject) => {
     let encodedAuth = btoa(`${username}:${password}`);
-
-    axios({
-      method: "get",
-      url: `${apiBasePath}${tokenPath}`,
-      config: {
-        headers: {
-          Authorization: `Basic ${encodedAuth}`,
-        },
-      },
-    })
+    let requestUrl = `${apiBasePath}${tokenPath}`;
+    const request = axios.create();
+    request.defaults.headers.common["Authorization"] = `Basic ${encodedAuth}`;
+    request
+      .get(requestUrl)
       .then((res) => resolve(res.data))
       .catch((err) => {
         err.isError = true;
         reject(err);
       });
+    // axios({
+    //   method: "get",
+    //   url: `${apiBasePath}${tokenPath}`,
+    //   config: {
+    //     headers: {
+    //       Authorization: `Basic ${encodedAuth}`,
+    //     },
+    //   },
+    // })
+    //   .then((res) => resolve(res.data))
+    //   .catch((err) => {
+    //     err.isError = true;
+    //     reject(err);
+    //   });
   });
 };
 const saveToken = (token) => {
@@ -36,9 +45,9 @@ const saveToken = (token) => {
     "access_token",
     {
       token: btoa(token),
-      expires_in: parseInt(
-        new Date().getTime() + parseInt(token.expires_in * 1000)
-      ),
+      expires_in: token.expires_in
+        ? parseInt(new Date().getTime() + parseInt(token.expires_in * 1000))
+        : parseInt(new Date().getTime() + parseInt(100 * 1000)),
       refreshToken: btoa(token.refresh_token),
     },
     { path: "/" }
@@ -47,14 +56,17 @@ const saveToken = (token) => {
 const fetchAuthToken = () => {
   return new Promise((resolve, reject) => {
     let accessToken = cookie.load("access_token");
+    console.log("Chucky fetching fetchAuthToken!!!", accessToken);
     if (
       !!accessToken &&
       !!accessToken.token &&
       !!accessToken.expires_in &&
       accessToken.expires_in > new Date().getTime()
     ) {
+      console.log("Chucky passed through fetchAuthToken!!!");
       resolve(atob(accessToken.token));
     } else {
+      console.log("Chucky stuck in fetchAuthToken!!!");
       reject({ isError: true, message: "unauthorized" });
     }
   });

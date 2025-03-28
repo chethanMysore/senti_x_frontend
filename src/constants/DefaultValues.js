@@ -1,6 +1,6 @@
 // API Base Paths
 export const apiTrainBasePath = "http://127.0.0.1:8000";
-export const apiInferenceBasePath = "http://localhost:3000/api/v1";
+export const apiInferenceBasePath = "http://localhost:8080/api/v1";
 
 // Auth Paths
 export const authRegisterPath = "/auth/register";
@@ -41,5 +41,63 @@ export const ModelFilterParams = {
   USERNAME: "username",
 };
 
+export const UserRoles = {
+  USER: "user",
+  ADMIN: "admin",
+};
+
+export const ErrorCodes = {
+  NOT_FOUND: 0,
+  ACCESS_DENIED: 1,
+  INVALID_CREDENTIALS: 2,
+};
+
+export const NotificationTypes = {
+  DEFAULT: "default",
+  SUCCESS: "success",
+  ERROR: "error",
+  WARNING: "warning",
+  INFO: "info",
+};
+
+export const NotificationPlacement = {
+  TOP_LEFT: "top-left",
+  TOP_CENTER: "top-center",
+  TOP_RIGHT: "top-right",
+  BOTTOM_LEFT: "bottom-left",
+  BOTTOM_CENTER: "bottom-center",
+  BOTTOM_RIGHT: "bottom-right",
+};
+
+export const NotificationTheme = {
+  LIGHT: "light",
+  DARK: "dark",
+  COLORED: "colored",
+};
+
+export const NotificationOptions = {
+  position: NotificationPlacement.DEFAULT,
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: false,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "light",
+};
+
+export const CountryNameAndCodeList = [
+  { code: "US", name: "United States" },
+  {
+    code: "IN",
+    name: "India",
+  },
+  {
+    code: "DE",
+    name: "Germany",
+  },
+];
+
 export const INVALID_CREDENTIALS = "INVALID_CREDENTIALS";
-export const ERROR_400 = "Request failed with error 400";
+export const ERROR_400 = 400;
+export const ERROR_401 = 401;

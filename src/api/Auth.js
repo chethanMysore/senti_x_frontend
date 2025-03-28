@@ -28,6 +28,7 @@ export const loginUser = async (params) => {
       params.password
     )
       .then((_data) => {
+        console.log("Chucky passed through GetAccessToken!!!", _data);
         FetchData(
           apiInferenceBasePath,
           userByUsernamePath,
