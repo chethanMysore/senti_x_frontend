@@ -48,6 +48,8 @@ const handleErrorSideEffects = function* ({ error, source }) {
           put(displayErrorPage(error.message, source)),
         ]);
     }
+  } else {
+    yield put(displayErrorPage(error.message, source));
   }
 };
 

@@ -2,12 +2,13 @@
 import { hideAuthMessage } from "actions";
 import { showAuthLoader } from "actions";
 import { loginUser } from "actions";
-import CircularProgress from "components/CircularProgress";
+// import CircularProgress from "components/CircularProgress";
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import { tokenValidator } from "util";
 import IntlMessages from "util/IntlMessages";
+import { Button, Card, Container, Form, InputGroup } from "react-bootstrap";
+// import LoginBackground from "assets/img/sidebar-2.jpg"
 
 class Login extends Component {
   constructor() {
@@ -42,45 +43,56 @@ class Login extends Component {
 
   render() {
     const { username, password } = this.state;
-    const { loader } = this.props;
+    // const { loader } = this.props;
     // const notificationAlertRef = React.useRef(null);
     return (
-      <div className="app-login">
-        <div>
-          <h1>SentiX Login</h1>
-        </div>
-        <div>
-          <form>
-            <div className="form-group mb-6">
-              <input
-                placeholder="Username"
-                onChange={this.handleUsernameChange}
-                defaultValue={username}
-                className="form-control form-control-lg"
-              />
-            </div>
-            <div className="form-group mb-6">
-              <input
-                type="password"
-                placeholder="Password"
-                onChange={this.handlePasswordChange}
-                defaultValue={password}
-                className="form-control form-control-lg"
-              />
-            </div>
-            <div className="mb-3 d-flex align-items-center justify-content-between">
-              <Button onClick={this.handleSubmit} color="primary">
-                <IntlMessages id="appModule.signIn" />
-              </Button>
-            </div>
-          </form>
-        </div>
-        {loader && (
+      <>
+        {/* {loader ? (
           <div className="loader-view">
             <CircularProgress />
           </div>
-        )}
-      </div>
+        ) : ( */}
+        <Container fluid className="login-container">
+          <Card>
+            <Card.Body className="login-form">
+              <Card.Title className="login-title">
+                <h3>Welcome Back to SentiX!</h3>
+              </Card.Title>
+              <InputGroup className="mb-3 login-input">
+                <InputGroup.Text id="basic-addon1">Username</InputGroup.Text>
+                <Form.Control
+                  placeholder="Username"
+                  defaultValue={username}
+                  onChange={this.handleUsernameChange}
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                />
+              </InputGroup>
+              <InputGroup className="mb-3 login-input">
+                <InputGroup.Text id="basic-addon2">
+                  Password&nbsp;
+                </InputGroup.Text>
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  defaultValue={password}
+                  onChange={this.handlePasswordChange}
+                  aria-label="Password"
+                  aria-describedby="basic-addon2"
+                />
+              </InputGroup>
+              <Button
+                variant="primary"
+                className="login-btn"
+                onClick={this.handleSubmit}
+              >
+                <IntlMessages id="appModule.signIn" />
+              </Button>
+            </Card.Body>
+          </Card>
+        </Container>
+        {/* )} */}
+      </>
     );
   }
 }
