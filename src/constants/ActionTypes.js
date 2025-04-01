@@ -42,6 +42,7 @@ export const DISPLAY_DEFAULT_MESSAGE = "DISPLAY_DEFAULT_MESSAGE";
 export const CLEAR_NOTIFICATIONS = "CLEAR_NOTIFICATIONS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const ON_CLEAR_ERROR_MESSAGES = "ON_CLEAR_ERROR_MESSAGES";
+export const HANDLE_ERROR = "HANDLE_ERROR";
 
 // Customizer const
 export const TOGGLE_COLLAPSED_NAV = "toggle_collapse_menu";

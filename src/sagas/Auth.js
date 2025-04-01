@@ -10,97 +10,63 @@ import {
   ON_LOGOUT_USER_SUCCESS,
   // RELOAD_USER_DATA, ToDO
   // ON_RELOAD_USER_DATA_SUCCESS, ToDo
-  WRITE_ERROR_MESSAGE,
 } from "constants/ActionTypes";
 
 import { registerNewUser, loginUser } from "api";
-import { showAuthMessage, showErrorNotification } from "actions";
-import { INVALID_CREDENTIALS } from "constants/DefaultValues";
-import { ERROR_401 } from "constants/DefaultValues";
-import { NotificationPlacement } from "constants/DefaultValues";
+import { showAuthMessage, handleError } from "actions";
 
 const execLoginAndLinkSideEffects = function* (username, password) {
   try {
-    const user = yield call(loginUser, { username, password });
-    if (user.isError) {
-      if (user.status == ERROR_401) {
-        yield put(
-          showErrorNotification(INVALID_CREDENTIALS, {
-            position: NotificationPlacement.TOP_CENTER,
-          })
-        );
-      } else {
-        yield put({
-          type: WRITE_ERROR_MESSAGE,
-          payload: {
-            message: user.message,
-            source: `execLoginAndLinkSideEffects --> ${loginUser.name}`,
-          },
-        });
-      }
+    const res = yield call(loginUser, { username, password });
+    if (res.isError) {
+      yield put(
+        handleError(res, `execLoginAndLinkSideEffects -> ${loginUser.name}`)
+      );
     } else {
-      localStorage.setItem("user_id", user.userID);
+      // localStorage.setItem("user_id", user.userID);
       yield put({
         type: ON_LOGIN_USER_SUCCESS,
-        payload: user,
+        payload: res,
       });
     }
   } catch (error) {
-    if (error.status == ERROR_401) {
-      yield put(
-        showErrorNotification(INVALID_CREDENTIALS, {
-          position: NotificationPlacement.TOP_CENTER,
-        })
-      );
-    } else {
-      yield put({
-        type: WRITE_ERROR_MESSAGE,
-        payload: {
-          message: error.message,
-          source: "execLoginAndLinkSideEffects",
-        },
-      });
-    }
+    yield put(handleError(error, "execLoginAndLinkSideEffects"));
   }
 };
 
 const execRegisterAndLinkSideEffects = function* (newUser) {
   try {
-    const data = yield call(registerNewUser, { newUserData: newUser });
-    if (data.isError) {
-      yield put(showAuthMessage(data.message));
+    const res = yield call(registerNewUser, { newUserData: newUser });
+    if (res.isError) {
+      yield [
+        put(showAuthMessage(res.message)),
+        put(
+          handleError(
+            res,
+            `execRegisterAndLinkSideEffects -> ${registerNewUser.name}`
+          )
+        ),
+      ];
     } else {
       yield put({
         type: ON_REGISTER_USER_SUCCESS,
-        payload: data,
+        payload: res,
       });
     }
   } catch (error) {
-    yield put({
-      type: WRITE_ERROR_MESSAGE,
-      payload: {
-        message: error.message,
-        source: "execRegisterAndLinkSideEffects",
-      },
-    });
+    yield put(handleError(error, "execRegisterAndLinkSideEffects"));
   }
 };
 
 const execLogoutAndLinkSideEffects = function* () {
   try {
-    localStorage.removeItem("user_id");
+    // localStorage.removeItem("user_id");
     cookie.remove("access_token");
     yield put({
       type: ON_LOGOUT_USER_SUCCESS,
     });
   } catch (error) {
-    yield put({
-      type: WRITE_ERROR_MESSAGE,
-      payload: {
-        message: error.message,
-        source: "execLogoutAndLinkSideEffects",
-      },
-    });
+    yield put(handleError(error, "execLogoutAndLinkSideEffects"));
   }
 };
 

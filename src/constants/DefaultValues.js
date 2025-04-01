@@ -99,5 +99,7 @@ export const CountryNameAndCodeList = [
 ];
 
 export const INVALID_CREDENTIALS = "INVALID_CREDENTIALS";
+export const SESSION_EXPIRED = "SESSION_EXPIRED";
 export const ERROR_400 = 400;
 export const ERROR_401 = 401;
+export const ERROR_500 = 500;

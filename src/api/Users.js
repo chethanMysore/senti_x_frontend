@@ -13,7 +13,16 @@ import { FetchData, UpdateData } from "util/apiCalls";
 export const fetchAllUsers = async (params) => {
   return new Promise((resolve, reject) => {
     FetchData(apiInferenceBasePath, usersListPath)
-      .then((data) => resolve(data))
+      .then((res) => {
+        res.data && res.data.users
+          ? resolve(res.data.users)
+          : reject({
+              ...res,
+              isError: true,
+              message: "Invalid response",
+              status: 500,
+            });
+      })
       .catch((err) => {
         err.isError = true;
         reject(err);
@@ -24,7 +33,16 @@ export const fetchAllUsers = async (params) => {
 export const fetchUserByID = async (params) => {
   return new Promise((resolve, reject) => {
     FetchData(apiInferenceBasePath, userByIDPath, true, params.userID)
-      .then((data) => resolve(data))
+      .then((res) => {
+        res.data && res.data.user
+          ? resolve(res.data.user)
+          : reject({
+              ...res,
+              isError: true,
+              message: "Invalid response",
+              status: 500,
+            });
+      })
       .catch((err) => {
         err.isError = true;
         reject(err);
@@ -35,7 +53,16 @@ export const fetchUserByID = async (params) => {
 export const fetchUserByUsername = async (params) => {
   return new Promise((resolve, reject) => {
     FetchData(apiInferenceBasePath, userByUsernamePath, true, params.username)
-      .then((data) => resolve(data))
+      .then((res) => {
+        res.data && res.data.user
+          ? resolve(res.data.user)
+          : reject({
+              ...res,
+              isError: true,
+              message: "Invalid response",
+              status: 500,
+            });
+      })
       .catch((err) => {
         err.isError = true;
         reject(err);
@@ -46,7 +73,16 @@ export const fetchUserByUsername = async (params) => {
 export const fetchUsersByName = async (params) => {
   return new Promise((resolve, reject) => {
     FetchData(apiInferenceBasePath, usersByNamePath, true, params.name)
-      .then((data) => resolve(data))
+      .then((res) => {
+        res.data && res.data.users
+          ? resolve(res.data.users)
+          : reject({
+              ...res,
+              isError: true,
+              message: "Invalid response",
+              status: 500,
+            });
+      })
       .catch((err) => {
         err.isError = true;
         reject(err);
@@ -62,7 +98,16 @@ export const updateUserByID = async (params) => {
       params.userID,
       params.updatedUser
     )
-      .then((data) => resolve(data))
+      .then((res) => {
+        res.data && res.data.user
+          ? resolve(res.data.user)
+          : reject({
+              ...res,
+              isError: true,
+              message: "Invalid response",
+              status: 500,
+            });
+      })
       .catch((err) => {
         err.isError = true;
         reject(err);

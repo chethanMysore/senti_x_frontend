@@ -11,7 +11,16 @@ import { Register, GetAccessToken, FetchData } from "util/apiCalls";
 export const registerNewUser = async (params) => {
   return new Promise((resolve, reject) => {
     Register(apiInferenceBasePath, authRegisterPath, params.newUserData)
-      .then((data) => resolve(data))
+      .then((res) => {
+        res.data && res.data.user
+          ? resolve(res.data.user)
+          : reject({
+              ...res,
+              isError: true,
+              message: "Invalid response",
+              status: 500,
+            });
+      })
       .catch((err) => {
         err.isError = true;
         reject(err);
@@ -28,14 +37,22 @@ export const loginUser = async (params) => {
       params.password
     )
       .then((_data) => {
-        console.log("Chucky passed through GetAccessToken!!!", _data);
         FetchData(
           apiInferenceBasePath,
           userByUsernamePath,
           true,
           params.username
         )
-          .then((user) => resolve(user))
+          .then((res) => {
+            res.data && res.data.user
+              ? resolve(res.data.user)
+              : reject({
+                  ...res,
+                  isError: true,
+                  message: "Invalid response",
+                  status: 500,
+                });
+          })
           .catch((err) => {
             err.isError = true;
             reject(err);

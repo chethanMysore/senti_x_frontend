@@ -18,7 +18,6 @@ import {
   ON_UPDATE_MODEL_DETAILS_SUCCESS,
   CREATE_MODEL,
   ON_CREATE_MODEL_SUCCESS,
-  WRITE_ERROR_MESSAGE,
 } from "constants/ActionTypes";
 
 import {
@@ -36,6 +35,7 @@ import {
   updateModelByID,
 } from "api";
 import { UserFilterParams, ModelFilterParams } from "constants/DefaultValues";
+import { handleError } from "actions";
 
 const execAndLinkSideEffects = function* (
   apiCallFn,
@@ -44,30 +44,18 @@ const execAndLinkSideEffects = function* (
   putData = true
 ) {
   try {
-    const data = yield call(apiCallFn, fnPayload);
-    if (data.isError) {
-      yield put({
-        type: WRITE_ERROR_MESSAGE,
-        payload: {
-          message: data.message,
-          source: `${execAndLinkSideEffects} --> ${apiCallFn.name}`,
-        },
-      });
-    } else if (putData) {
-      yield put({
-        type: actionOnSuccess,
-        data,
-      });
+    const res = yield call(apiCallFn, fnPayload);
+    if (res.isError) {
+      yield put(
+        handleError(res, `execAndLinkSideEffects -> ${apiCallFn.name}`)
+      );
     } else {
-      yield put({
-        type: actionOnSuccess,
-      });
+      putData
+        ? yield put({ type: actionOnSuccess, payload: res })
+        : yield put({ type: actionOnSuccess });
     }
   } catch (error) {
-    yield put({
-      type: WRITE_ERROR_MESSAGE,
-      payload: { message: error.message, source: "execAndLinkSideEffects" },
-    });
+    yield put(handleError(error, `execAndLinkSideEffects`));
   }
 };
 
