@@ -75,7 +75,7 @@ const getTokenFromApi = (apiBasePath, tokenPath, username, password) => {
 // };
 
 const getRequest = (
-  token,
+  // token,
   apiBasePath,
   entityPath,
   byParam = false,
@@ -90,6 +90,7 @@ const getRequest = (
     if (queryParams.length > 0)
       requestUrl = buildUrlQuery(requestUrl, queryParams);
     const request = axios.create();
+    request.defaults.withCredentials = true;
     // request.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     request
       .get(requestUrl)
@@ -113,6 +114,7 @@ const postRequest = (
     //   request.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     // }
     request.defaults.headers.common["ContentType"] = "application/json";
+    request.defaults.withCredentials = true;
     request
       .post(requestUrl, newData)
       .then((res) => resolve(res))
@@ -138,6 +140,7 @@ const putRequest = (
     const request = axios.create();
     // request.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     request.defaults.headers.common["ContentType"] = "application/json";
+    request.defaults.withCredentials = true;
     request
       .put(requestUrl, updateData)
       .then((res) => resolve(res))

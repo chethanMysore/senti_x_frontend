@@ -15,7 +15,8 @@ export const usersListPath = "/users";
 export const userByIDPath = "/users/id";
 export const usersByNamePath = "/users/name";
 export const userByUsernamePath = "/users/username";
-export const userRoleByIDPath = "/auth/id";
+export const userRoleByIDPath = "/users/auth/id";
+export const reloadAuthUser = "/users/auth/user";
 // Models
 export const modelsListPath = "/models";
 export const modelByIDPath = "/models/id";
@@ -98,6 +99,7 @@ export const CountryNameAndCodeList = [
   },
 ];
 
+export const LOGIN_SUCCESSFUL = "LOGIN_SUCCESSFUL";
 export const INVALID_CREDENTIALS = "INVALID_CREDENTIALS";
 export const SESSION_EXPIRED = "SESSION_EXPIRED";
 export const ERROR_400 = 400;

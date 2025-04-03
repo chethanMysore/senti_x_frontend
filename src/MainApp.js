@@ -17,7 +17,7 @@
 */
 import React from "react";
 import { Provider } from "react-redux";
-import configureStore, { history } from "store";
+import configureStore from "store";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -26,16 +26,16 @@ import "./assets/scss/light-bootstrap-dashboard-react.scss?v=2.0.0";
 import "./assets/css/demo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-import App from "./containers/App";
+import AppContainer from "./containers/AppContainer";
 // import Login from "containers/Login";
 
 const store = configureStore();
 
 const MainApp = () => (
   <Provider store={store}>
-    <BrowserRouter history={history}>
+    <BrowserRouter>
       <Switch>
-        <Route path="/" render={(props) => <App {...props} />} />
+        <Route path="/" component={AppContainer} />
       </Switch>
     </BrowserRouter>
   </Provider>

@@ -5,9 +5,10 @@ import { loginUser } from "actions";
 // import CircularProgress from "components/CircularProgress";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { tokenValidator } from "util";
+// import { tokenValidator } from "util";
 import IntlMessages from "util/IntlMessages";
 import { Button, Card, Container, Form, InputGroup } from "react-bootstrap";
+import { UserRoles } from "constants/DefaultValues";
 // import LoginBackground from "assets/img/sidebar-2.jpg"
 
 class Login extends Component {
@@ -36,8 +37,15 @@ class Login extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.authUser && tokenValidator()) {
-      this.props.history.push("/");
+    if (this.props.authUser) {
+      let role = this.props.authUser.role;
+      if (role && role === UserRoles.ADMIN) {
+        this.props.history.push("/app/admin");
+        this.props.location.pathname = "app/admin";
+      } else {
+        this.props.history.push("/app/profile");
+        this.props.location.pathname = "/app/profile";
+      }
     }
   }
 

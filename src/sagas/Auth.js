@@ -1,5 +1,5 @@
 /*eslint no-unused-vars: ["error", {"argsIgnorePattern": "^_"}]*/
-import { call, put, takeLatest } from "redux-saga/effects";
+import { all, call, put, takeLatest } from "redux-saga/effects";
 import cookie from "react-cookies";
 import {
   REGISTER_USER,
@@ -12,8 +12,13 @@ import {
   // ON_RELOAD_USER_DATA_SUCCESS, ToDo
 } from "constants/ActionTypes";
 
-import { registerNewUser, loginUser } from "api";
+import { registerNewUser, loginUser, reloadUser } from "api";
 import { showAuthMessage, handleError } from "actions";
+import { setInitURL } from "actions";
+import { showSuccessNotification } from "actions";
+import { LOGIN_SUCCESSFUL } from "constants/DefaultValues";
+import { ON_RELOAD_USER_DATA_SUCCESS } from "constants/ActionTypes";
+import { RELOAD_USER_DATA } from "constants/ActionTypes";
 
 const execLoginAndLinkSideEffects = function* (username, password) {
   try {
@@ -24,10 +29,36 @@ const execLoginAndLinkSideEffects = function* (username, password) {
       );
     } else {
       // localStorage.setItem("user_id", user.userID);
-      yield put({
-        type: ON_LOGIN_USER_SUCCESS,
-        payload: res,
-      });
+      yield all([
+        yield put({
+          type: ON_LOGIN_USER_SUCCESS,
+          payload: res,
+        }),
+        put(showSuccessNotification(LOGIN_SUCCESSFUL)),
+        // put(setInitURL("/app/profile")),
+      ]);
+    }
+  } catch (error) {
+    yield put(handleError(error, "execLoginAndLinkSideEffects"));
+  }
+};
+
+const execReloadAndLinkSideEffects = function* () {
+  try {
+    const res = yield call(reloadUser);
+    if (res.isError) {
+      yield put(
+        handleError(res, `execLoginAndLinkSideEffects -> ${loginUser.name}`)
+      );
+    } else {
+      // localStorage.setItem("user_id", user.userID);
+      yield all([
+        yield put({
+          type: ON_RELOAD_USER_DATA_SUCCESS,
+          payload: res,
+        }),
+        put(setInitURL("/")),
+      ]);
     }
   } catch (error) {
     yield put(handleError(error, "execLoginAndLinkSideEffects"));
@@ -81,4 +112,5 @@ export const authSagas = function* (_action) {
     )
   );
   yield takeLatest(LOGOUT_USER, () => execLogoutAndLinkSideEffects());
+  yield takeLatest(RELOAD_USER_DATA, () => execReloadAndLinkSideEffects());
 };

@@ -11,7 +11,7 @@ import {
 import {
   ERROR_401,
   SESSION_EXPIRED,
-  // INVALID_CREDENTIALS
+  INVALID_CREDENTIALS,
 } from "constants/DefaultValues";
 import {
   showErrorNotification,
@@ -37,10 +37,17 @@ const handleErrorSideEffects = function* ({ error, source }) {
   if (error && error.status) {
     switch (error.status) {
       case ERROR_401:
-        yield all([
-          put(showErrorNotification(SESSION_EXPIRED)),
-          put(setInitURL("/login")),
-        ]);
+        error.response &&
+        error.response.data &&
+        error.response.data.match(/no user found/gi)
+          ? yield all([
+              put(showErrorNotification(INVALID_CREDENTIALS)),
+              put(setInitURL("/login")),
+            ])
+          : yield all([
+              put(showErrorNotification(SESSION_EXPIRED)),
+              put(setInitURL("/login")),
+            ]);
         break;
       default:
         yield all([

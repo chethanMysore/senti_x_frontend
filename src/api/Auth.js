@@ -1,4 +1,5 @@
 /*eslint no-unused-vars: ["error", {"argsIgnorePattern": "^_"}]*/
+import { reloadAuthUser } from "constants/DefaultValues";
 import {
   apiInferenceBasePath,
   authRegisterPath,
@@ -57,6 +58,26 @@ export const loginUser = async (params) => {
             err.isError = true;
             reject(err);
           });
+      })
+      .catch((err) => {
+        err.isError = true;
+        reject(err);
+      });
+  });
+};
+
+export const reloadUser = async () => {
+  return new Promise((resolve, reject) => {
+    FetchData(apiInferenceBasePath, reloadAuthUser)
+      .then((res) => {
+        res.data && res.data.user
+          ? resolve(res.data.user)
+          : reject({
+              ...res,
+              isError: true,
+              message: "Invalid response",
+              status: 500,
+            });
       })
       .catch((err) => {
         err.isError = true;

@@ -42,6 +42,6 @@ export const hideAuthLoader = () => {
   return { type: HIDE_LOADER };
 };
 
-export const reloadUserData = (payload) => {
-  return { type: RELOAD_USER_DATA, payload };
+export const reloadUserData = () => {
+  return { type: RELOAD_USER_DATA };
 };

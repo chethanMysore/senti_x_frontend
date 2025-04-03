@@ -21,10 +21,10 @@ const INIT_STATE = {
 export default (state = INIT_STATE, { type, payload }) => {
   switch (type) {
     case ON_REGISTER_USER_SUCCESS: {
-      return { ...state, loader: false, authUser: payload.user };
+      return { ...state, loader: false, authUser: payload };
     }
     case ON_LOGIN_USER_SUCCESS: {
-      return { ...state, loader: false, authUser: payload.user };
+      return { ...state, loader: false, authUser: payload };
     }
     case INIT_URL: {
       return { ...state, initURL: payload };
@@ -50,7 +50,7 @@ export default (state = INIT_STATE, { type, payload }) => {
       return { ...state, alertMessage: "", showMessage: false, loader: false };
     }
     case ON_RELOAD_USER_DATA_SUCCESS: {
-      return { ...state, loader: false, authUser: payload.user };
+      return { ...state, loader: false, authUser: payload };
     }
     default:
       return state;
