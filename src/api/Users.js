@@ -95,8 +95,9 @@ export const updateUserByID = async (params) => {
     UpdateData(
       apiInferenceBasePath,
       userEditByIDPath,
-      params.userID,
       params.updatedUser
+      // true,
+      // params.userID
     )
       .then((res) => {
         res.data && res.data.user

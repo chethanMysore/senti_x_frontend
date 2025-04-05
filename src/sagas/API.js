@@ -5,15 +5,19 @@ import {
   FETCH_ALL_FEEDBACKS,
   ON_FETCH_ALL_FEEDBACKS_SUCCESS,
   FETCH_ALL_USERS,
+  FETCH_USERS_BY_FILTER,
   FETCH_USER_DETAILS,
   UPDATE_USER_DETAILS,
   ON_FETCH_ALL_USERS_SUCCESS,
+  ON_FETCH_USERS_BY_FILTER_SUCCESS,
   ON_FETCH_USER_DETAILS_SUCCESS,
   ON_UPDATE_USER_DETAILS_SUCCESS,
   FETCH_ALL_MODELS,
   FETCH_MODEL_DETAILS,
+  FETCH_MODELS_BY_FILTER,
   UPDATE_MODEL_DETAILS,
   ON_FETCH_ALL_MODELS_SUCCESS,
+  ON_FETCH_MODELS_BY_FILTER_SUCCESS,
   ON_FETCH_MODEL_DETAILS_SUCCESS,
   ON_UPDATE_MODEL_DETAILS_SUCCESS,
   CREATE_MODEL,
@@ -89,11 +93,15 @@ export const apiSagas = function* (_action) {
           ON_FETCH_USER_DETAILS_SUCCESS
         );
       }
+    }
+  });
+  yield takeLatest(FETCH_USERS_BY_FILTER, (_action) => {
+    switch (_action.payload.paramName) {
       case UserFilterParams.NAME: {
         return execAndLinkSideEffects(
           fetchUsersByName,
           { name: _action.payload.paramVal },
-          ON_FETCH_ALL_USERS_SUCCESS
+          ON_FETCH_USERS_BY_FILTER_SUCCESS
         );
       }
     }
@@ -107,18 +115,22 @@ export const apiSagas = function* (_action) {
           ON_FETCH_MODEL_DETAILS_SUCCESS
         );
       }
-      case ModelFilterParams.MODELNAME: {
-        return execAndLinkSideEffects(
-          fetchModelsByName,
-          { name: _action.payload.paramVal },
-          ON_FETCH_MODEL_DETAILS_SUCCESS
-        );
-      }
+    }
+  });
+  yield takeLatest(FETCH_MODELS_BY_FILTER, (_action) => {
+    switch (_action.payload.paramName) {
       case ModelFilterParams.USERNAME: {
         return execAndLinkSideEffects(
           fetchModelsByUsername,
           { username: _action.payload.paramVal },
-          ON_FETCH_ALL_MODELS_SUCCESS
+          ON_FETCH_MODELS_BY_FILTER_SUCCESS
+        );
+      }
+      case ModelFilterParams.MODELNAME: {
+        return execAndLinkSideEffects(
+          fetchModelsByName,
+          { name: _action.payload.paramVal },
+          ON_FETCH_MODELS_BY_FILTER_SUCCESS
         );
       }
     }

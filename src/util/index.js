@@ -1,6 +1,8 @@
 /*eslint no-unused-vars: ["error", {"argsIgnorePattern": "^_"}]*/
+import React from "react";
 import { CountryNameAndCodeList } from "constants/DefaultValues";
 import cookie from "react-cookies";
+import { Route } from "react-router-dom";
 
 export const UpdateItemInList = (listData, updatedItem, idParam = "id") => {
   return listData.map((item, _index) => {
@@ -25,4 +27,22 @@ export const getCountryNameFromCode = (code) => {
     (country) => country.code === code
   );
   return countryName ? countryName.name : "Unknown";
+};
+
+export const getRoutes = (routes, props, getUsers = () => null) => {
+  return routes.map((prop, key) => {
+    return prop.path === "/users" ? (
+      <Route
+        path={prop.path}
+        element={<prop.component {...props} getUsers={getUsers} />}
+        key={key}
+      />
+    ) : (
+      <Route
+        path={prop.path}
+        element={<prop.component {...props} />}
+        key={key}
+      />
+    );
+  });
 };

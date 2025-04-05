@@ -58,6 +58,7 @@
 */
 import React, { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
+import { IntlProvider } from "react-intl";
 // import { ConnectedRouter } from "react-router-redux";
 // import { Provider } from "react-redux";
 // import { Route, Switch } from "react-router-dom";
@@ -74,16 +75,23 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 // import AdminDashboard from "app/views/AdminDashboard";
 // import Login from "containers/Login";
 import MainApp from "./MainApp";
+import AppLocale from "lngProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 // export const store = configureStore();
 
 // Create a reusable render method that we can call more than once
+const currentAppLocale = AppLocale["en"];
 let render = () => {
   // Dynamically import our main App component, and render it
   root.render(
     <StrictMode>
-      <MainApp />
+      <IntlProvider
+        locale={currentAppLocale.locale}
+        messages={currentAppLocale.messages}
+      >
+        <MainApp />
+      </IntlProvider>
     </StrictMode>
     // <Provider store={store}>
     //   <BrowserRouter history={history}>

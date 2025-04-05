@@ -1,19 +1,7 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  Badge,
-  Button,
-  Card,
-  Navbar,
-  Nav,
-  Table,
-  Container,
-  Row,
-  Col,
-  Form,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import { Card, Table, Row, Col } from "react-bootstrap";
 
 import { fetchAllFeedbacks } from "actions/Api";
 // import EventList from "components/EventList";
@@ -28,10 +16,10 @@ class Feedbacks extends Component {
     //ToDo: Uncomment this for api calls
     this.props.fetchAllFeedbacks();
   }
-  editSubmitHandler(id, data) {
-    //ToDo: Uncomment this for api calls
-    //this.props.editEventTableData(id, data);
-  }
+  // editSubmitHandler(id, data) {
+  //   //ToDo: Uncomment this for api calls
+  //   //this.props.editEventTableData(id, data);
+  // }
   render() {
     const feedbacksData = this.props.feedbacksData;
     return (
@@ -56,7 +44,7 @@ class Feedbacks extends Component {
                     !!feedbacksData.feedbacks &&
                     feedbacksData.feedbacks.length > 0 &&
                     feedbacksData.feedbacks.map((data, index) => (
-                      <tr>
+                      <tr key={index}>
                         <td>{data.typ}</td>
                         <td>{data.msg}</td>
                         <td>{data.created_on}</td>

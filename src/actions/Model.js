@@ -4,10 +4,18 @@ import {
   UPDATE_MODELS_DATA,
   UPDATE_MODEL_DETAILS,
   CREATE_MODEL,
+  FETCH_MODELS_BY_FILTER,
 } from "constants/ActionTypes";
 
 export const fetchAllModels = () => {
   return { type: FETCH_ALL_MODELS };
+};
+
+export const fetchModelsByUser = (username) => {
+  return {
+    type: FETCH_MODELS_BY_FILTER,
+    payload: { paramName: "username", paramVal: username },
+  };
 };
 
 export const fetchModelDetails = (modelID) => {

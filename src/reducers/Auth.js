@@ -3,6 +3,7 @@ import {
   ON_LOGIN_USER_SUCCESS,
   ON_LOGOUT_USER_SUCCESS,
   ON_RELOAD_USER_DATA_SUCCESS,
+  ON_UPDATE_USER_DETAILS_SUCCESS,
   INIT_URL,
   SHOW_LOADER,
   HIDE_LOADER,
@@ -51,6 +52,13 @@ export default (state = INIT_STATE, { type, payload }) => {
     }
     case ON_RELOAD_USER_DATA_SUCCESS: {
       return { ...state, loader: false, authUser: payload };
+    }
+    case ON_UPDATE_USER_DETAILS_SUCCESS: {
+      let newState = { ...state };
+      if (state.authUser.userID === payload.userID) {
+        newState.authUser = { ...state.authUser, ...payload };
+      }
+      return { ...newState };
     }
     default:
       return state;

@@ -4,6 +4,7 @@ import { showAuthLoader } from "actions";
 import { loginUser } from "actions";
 // import CircularProgress from "components/CircularProgress";
 import React, { Component } from "react";
+import { Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 // import { tokenValidator } from "util";
 import IntlMessages from "util/IntlMessages";
@@ -36,24 +37,18 @@ class Login extends Component {
     });
   }
 
-  componentDidUpdate() {
-    if (this.props.authUser) {
-      let role = this.props.authUser.role;
-      if (role && role === UserRoles.ADMIN) {
-        this.props.history.push("/app/admin");
-        this.props.location.pathname = "app/admin";
-      } else {
-        this.props.history.push("/app/profile");
-        this.props.location.pathname = "/app/profile";
-      }
-    }
-  }
-
   render() {
     const { username, password } = this.state;
+    const { authUser } = this.props;
     // const { loader } = this.props;
     // const notificationAlertRef = React.useRef(null);
-    return (
+    return authUser ? (
+      authUser.role && authUser.role === UserRoles.ADMIN ? (
+        <Navigate to={"/app/admin"} />
+      ) : (
+        <Navigate to={"/app/user"} />
+      )
+    ) : (
       <>
         {/* {loader ? (
           <div className="loader-view">

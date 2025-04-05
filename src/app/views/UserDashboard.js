@@ -22,9 +22,9 @@ import { Route, Routes } from "react-router-dom";
 import ModelsList from "./ModelsList";
 import { connect } from "react-redux";
 import { getRoutes } from "util";
-import { fetchModelsByUser, fetchAllUsers } from "actions";
+import { fetchModelsByUser } from "actions";
 
-class AdminDashboard extends Component {
+class UserDashboard extends Component {
   constructor(props) {
     super(props);
   }
@@ -35,24 +35,20 @@ class AdminDashboard extends Component {
     }
   }
 
-  getUsers() {
-    this.props.fetchAllUsers();
-  }
-
   render() {
     const { authUser, modelsList, routes } = this.props;
     return (
       <>
         <Routes>
           <Route
-            path="/app/admin/"
+            path="/"
             element={
               <div className="content">
                 <ModelsList user={authUser} modelsList={modelsList} />
               </div>
             }
           />
-          {getRoutes(routes, this.props, this.getUsers)}
+          {getRoutes(routes, this.props)}
           {/* <Navigate to={"/app/profile/models"} /> */}
         </Routes>
       </>
@@ -65,6 +61,4 @@ const mapStateToProps = ({ model }) => {
   return { modelsList, modelDetails };
 };
 
-export default connect(mapStateToProps, { fetchModelsByUser, fetchAllUsers })(
-  AdminDashboard
-);
+export default connect(mapStateToProps, { fetchModelsByUser })(UserDashboard);

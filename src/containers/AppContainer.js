@@ -1,15 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import { UserRoles } from "constants/DefaultValues";
-import AppLocale from "lngProvider";
-import { IntlProvider } from "react-intl";
-import ErrorBoundary from "./ErrorBoundary";
+import { Navigate, Route, Routes } from "react-router-dom";
 // import { tokenValidator } from "util";
 // import MainApp from "app/index";
 import App from "app";
 import Login from "./Login";
-import Error404 from "components/Error404";
 import { setInitURL } from "actions";
 import { connect } from "react-redux";
 import { showAuthMessage } from "actions";
@@ -17,31 +12,44 @@ import { hideAuthMessage } from "actions";
 import { clearNotifications } from "actions";
 import Notifications from "components/Notifications/Notifications";
 import { reloadUserData } from "actions";
+import Error404 from "components/Error404";
+import { clearErrors } from "actions";
+import { UserRoles } from "constants/DefaultValues";
 
-const RestrictedRoute = ({ component: Component, authUser, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      authUser ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{ pathname: "/login", state: { from: props.location } }}
-        />
-      )
-    }
-  />
-);
+function RestrictedRoute({ children, redirectTo, authUser }) {
+  return authUser ? children : <Navigate to={redirectTo} />;
+}
+
+function ErrorBoundary({
+  children,
+  isError,
+  authUser,
+  alertMessage,
+  showMessage,
+  clearErrors,
+}) {
+  const redirectTo = authUser
+    ? authUser.role && authUser.role === UserRoles.ADMIN
+      ? "/app/admin"
+      : "/app/user"
+    : "";
+  return isError ? (
+    <Error404
+      redirectTo={redirectTo}
+      alertMessage={alertMessage}
+      showMessage={showMessage}
+      clearErrors={clearErrors}
+    />
+  ) : (
+    children
+  );
+}
 
 class AppContainer extends Component {
-  // componentDidMount() {
-  //   if (!this.props.authUser) {
-  //     this.props.reloadUserData();
-  //   }
-  // }
-  UNSAFE_componentWillMount() {
-    if (this.props.initURL === "") {
-      this.props.setInitURL(this.props.history.location.pathname);
+  componentDidMount() {
+    const isAuthorized = sessionStorage.getItem("isAuthorized");
+    if (isAuthorized) {
+      this.props.reloadUserData();
     }
   }
   componentDidUpdate() {
@@ -57,80 +65,49 @@ class AppContainer extends Component {
   render() {
     const {
       authUser,
-      match,
-      location,
-      locale,
-      initURL,
       notificationMessage,
       notificationType,
       notificationOptions,
       isError,
+      alertMessage,
+      showMessage,
     } = this.props;
-    // if (location.pathname === "/") {
-    //   return <Redirect to={"/login"} />;
-    // }
-    if (location.pathname === "/") {
-      if (isError) {
-        return <Redirect to={"/error"} />;
-      } else if (!authUser) {
-        return <Redirect to={"/login"} />;
-      } else if (initURL === "" || initURL === "/" || initURL === "/login") {
-        return authUser.role && authUser.role === UserRoles.ADMIN ? (
-          <Redirect to={"/app/admin/"} />
-        ) : (
-          <Redirect to={"/app/profile"} />
-        );
-      } else {
-        return <Redirect to={initURL} />;
-      }
-    }
 
-    const currentAppLocale = AppLocale[locale.locale];
     return (
-      <IntlProvider
-        locale={currentAppLocale.locale}
-        messages={currentAppLocale.messages}
-      >
-        <div className="app-main">
-          <ErrorBoundary isError={isError}>
-            <Notifications
-              message={notificationMessage}
-              messageType={notificationType}
-              options={notificationOptions}
+      <div className="app-main">
+        <ErrorBoundary
+          redirectTo={"/error"}
+          isError={isError}
+          authUser={authUser}
+          alertMessage={alertMessage}
+          showMessage={showMessage}
+          clearErrors={this.props.clearErrors}
+        >
+          <Notifications
+            message={notificationMessage}
+            messageType={notificationType}
+            options={notificationOptions}
+          />
+          <Routes>
+            <Route
+              path="/*"
+              element={
+                <RestrictedRoute redirectTo={"/login"} authUser={authUser}>
+                  <App {...this.props} />
+                </RestrictedRoute>
+              }
             />
-            <Switch>
-              <RestrictedRoute
-                path={`${match.url}app`}
-                authUser={authUser}
-                component={App}
-              />
-              {/* <Route
-                path="/app*"
-                render={(props) => (
-                  <RestrictedRoute
-                    path="/app*"
-                    authUser={authUser}
-                    component={App}
-                    {...props}
-                  />
-                )}
-              /> */}
-              <Route path="/login" component={Login} />
-              <Route
-                path="/error"
-                render={(props) => <Error404 {...props} />}
-              />
-            </Switch>
-          </ErrorBoundary>
-        </div>
-      </IntlProvider>
+            <Route path="/login" element={<Login authUser={authUser} />} />
+          </Routes>
+        </ErrorBoundary>
+      </div>
     );
   }
 }
 
 const mapStateToProps = ({ settings, auth, notification }) => {
   const { locale } = settings;
-  const { authUser, initURL } = auth;
+  const { authUser, initURL, alertMessage, showMessage } = auth;
   const {
     notificationType,
     notificationMessage,
@@ -149,6 +126,8 @@ const mapStateToProps = ({ settings, auth, notification }) => {
     notificationOptions,
     errorMessage,
     source,
+    alertMessage,
+    showMessage,
   };
 };
 
@@ -158,4 +137,5 @@ export default connect(mapStateToProps, {
   hideAuthMessage,
   clearNotifications,
   reloadUserData,
+  clearErrors,
 })(AppContainer);

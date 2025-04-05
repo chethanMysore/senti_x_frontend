@@ -15,24 +15,32 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import ModelsList from "app/views/ModelPage.js";
-import UsersList from "app/views/UsersPage.js";
+import UserProfile from "app/views/UserProfile";
+import UsersList from "app/views/UsersList";
 
-const dashboardRoutes = [
+export const userRoutes = [
   {
-    path: "/models",
-    name: "Subscribed Models",
-    icon: "nc-icon nc-alien-33",
-    component: ModelsList,
-    layout: "/profile",
+    path: "/profile",
+    name: "Profile",
+    icon: "nc-icon nc-circle-09",
+    component: UserProfile,
+    layout: "/app/user",
+  },
+];
+
+export const adminRoutes = [
+  {
+    path: "/profile",
+    name: "Profile",
+    icon: "nc-icon nc-circle-09",
+    component: UserProfile,
+    layout: "/app/admin",
   },
   {
     path: "/users",
     name: "Registered Users",
-    icon: "nc-icon nc-circle-09",
+    icon: "nc-icon nc-alien-33",
     component: UsersList,
-    layout: "/admin",
+    layout: "/app/admin",
   },
 ];
-
-export default dashboardRoutes;

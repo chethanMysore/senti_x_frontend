@@ -29,6 +29,7 @@ const execLoginAndLinkSideEffects = function* (username, password) {
       );
     } else {
       // localStorage.setItem("user_id", user.userID);
+      sessionStorage.setItem("isAuthorized", true);
       yield all([
         yield put({
           type: ON_LOGIN_USER_SUCCESS,
@@ -92,6 +93,7 @@ const execRegisterAndLinkSideEffects = function* (newUser) {
 const execLogoutAndLinkSideEffects = function* () {
   try {
     // localStorage.removeItem("user_id");
+    sessionStorage.removeItem("isAuthorized");
     cookie.remove("access_token");
     yield put({
       type: ON_LOGOUT_USER_SUCCESS,

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /*!
 
 =========================================================
@@ -16,17 +17,17 @@
 
 */
 import React from "react";
-import { Route, Switch, Redirect, withRouter } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import Footer from "components/Footer/Footer";
-import Sidebar from "components/Sidebar/Sidebar";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
-import routes from "routes.js";
-
-import sidebarImage from "assets/img/sidebar-3.jpg";
 import AdminDashboard from "./views/AdminDashboard";
-import UserProfile from "./views/UserProfilePage";
+import UserDashboard from "./views/UserDashboard";
+import { userRoutes, adminRoutes } from "routes";
+import Sidebar from "components/Sidebar/Sidebar";
+import sidebarImage from "assets/img/sidebar-3.jpg";
+import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+import { UserRoles } from "constants/DefaultValues";
 
 class App extends React.Component {
   constructor(props) {
@@ -39,18 +40,6 @@ class App extends React.Component {
     this.setHasImage = this.setHasImage.bind(this);
     this.setColor = this.setColor.bind(this);
     this.setImage = this.setImage.bind(this);
-  }
-
-  setHasImage() {
-    this.setState({ hasImage: !this.state.hasImage });
-  }
-
-  setColor(color) {
-    this.setState({ color: color });
-  }
-
-  setImage(image) {
-    this.setState({ image: image });
   }
 
   componentDidUpdate() {
@@ -66,7 +55,27 @@ class App extends React.Component {
       element.parentNode.removeChild(element);
     }
   }
+
+  setHasImage() {
+    this.setState({ hasImage: !this.state.hasImage });
+  }
+
+  setColor(color) {
+    this.setState({ color: color });
+  }
+
+  setImage(image) {
+    this.setState({ image: image });
+  }
+
   render() {
+    const authUser = this.props.authUser;
+    const routes =
+      authUser && authUser.role
+        ? authUser.role === UserRoles.ADMIN
+          ? adminRoutes
+          : userRoutes
+        : [];
     return (
       <>
         <div className="wrapper">
@@ -76,17 +85,17 @@ class App extends React.Component {
             routes={routes}
           />
           <div className="main-panel">
-            <Switch>
+            <Routes>
               <Route
-                path="/app/admin"
-                render={(props) => <AdminDashboard {...props} />}
+                path="/app/admin/*"
+                element={<AdminDashboard {...this.props} routes={routes} />}
               />
               <Route
-                path="/app/profile"
-                render={(props) => <UserProfile {...props} />}
+                path="/app/user/*"
+                element={<UserDashboard {...this.props} routes={routes} />}
               />
-              <Redirect from="/" to="/profile/models" />
-            </Switch>
+              {/* <Navigate from="/" to="/app/profile" /> */}
+            </Routes>
 
             <Footer />
           </div>
@@ -104,4 +113,4 @@ class App extends React.Component {
   }
 }
 
-export default withRouter(App);
+export default App;

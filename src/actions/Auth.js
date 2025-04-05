@@ -8,6 +8,7 @@ import {
   HIDE_LOADER,
   SHOW_MESSAGE,
   HIDE_MESSAGE,
+  UPDATE_USER_DETAILS,
 } from "constants/ActionTypes";
 
 export const registerUser = (user) => {
@@ -44,4 +45,8 @@ export const hideAuthLoader = () => {
 
 export const reloadUserData = () => {
   return { type: RELOAD_USER_DATA };
+};
+
+export const updateUserDetails = (userID, userData) => {
+  return { type: UPDATE_USER_DETAILS, payload: { userID, userData } };
 };

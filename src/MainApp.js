@@ -18,7 +18,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import configureStore from "store";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/animate.min.css";
@@ -33,11 +33,11 @@ const store = configureStore();
 
 const MainApp = () => (
   <Provider store={store}>
-    <BrowserRouter>
-      <Switch>
-        <Route path="/" component={AppContainer} />
-      </Switch>
-    </BrowserRouter>
+    <Router>
+      <Routes>
+        <Route path="/*" element={<AppContainer />} />
+      </Routes>
+    </Router>
   </Provider>
 );
 
